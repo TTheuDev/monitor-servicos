@@ -5,7 +5,6 @@
   "alvos": [
     { "nome": "Site do Google", "tipo": "http", "url": "https://www.google.com" },
     { "nome": "DNS Cloudflare (porta 53)", "tipo": "tcp", "host": "1.1.1.1", "porta": 53 },
-    { "nome": "Gateway da rede local", "tipo": "ping", "host": "192.168.0.1" },
-    { "nome": "Servidor de teste local", "tipo": "http", "url": "http://localhost:8000" }
+    { "nome": "DNS do Google (ping)", "tipo": "ping", "host": "8.8.8.8" }
   ]
 }

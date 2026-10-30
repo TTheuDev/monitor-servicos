@@ -33,6 +33,8 @@ python3 monitor.py -c outro.json       # usa outro arquivo de configuração
 
 No Windows, use `py monitor.py` no lugar de `python3 monitor.py`.
 
+O `config.example.json` traz alvos que funcionam em qualquer rede. Para monitorar o seu roteador, adicione um alvo `ping` com o IP do gateway (no Windows, veja o **Gateway Padrão** em `ipconfig`).
+
 Para rodar a cada 5 minutos no Linux, com cron:
 
 ```
