@@ -66,9 +66,13 @@ def checar_ping(host, timeout):
     except subprocess.TimeoutExpired:
         return False, "ping excedeu o tempo limite"
 
-    if resultado.returncode == 0:
-        return True, "host respondeu ao ping"
-    return False, "host não respondeu ao ping"
+    if resultado.returncode != 0:
+        return False, "host não respondeu ao ping"
+    # No Windows, o ping devolve código 0 até quando o roteador responde
+    # "host de destino inacessível". Resposta de verdade traz "TTL=".
+    if platform.system().lower() == "windows" and b"ttl" not in resultado.stdout.lower():
+        return False, "host inacessível (resposta sem TTL)"
+    return True, "host respondeu ao ping"
 
 
 def executar_checagem(alvo, timeout_padrao):

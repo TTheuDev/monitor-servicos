@@ -1,5 +1,7 @@
 # Monitor de Serviços
 
+![Testes](https://github.com/TTheuDev/monitor-servicos/actions/workflows/tests.yml/badge.svg)
+
 Script em Python que verifica se serviços e equipamentos estão no ar, registra o resultado em um log e avisa **quando um serviço cai e quando ele volta**.
 
 Fiz este projeto para praticar monitoramento, automação e tratamento de incidentes, que são tarefas do dia a dia em suporte e infraestrutura. Usa só a biblioteca padrão do Python, então não há nada para instalar.
@@ -18,7 +20,7 @@ Fiz este projeto para praticar monitoramento, automação e tratamento de incide
 
 ## Como usar
 
-Requisito: Python 3.8 ou superior.
+Requisito: Python 3.10 ou superior (os testes automáticos rodam nas versões 3.10 e 3.12).
 
 ```bash
 git clone https://github.com/TTheuDev/monitor-servicos.git
@@ -94,7 +96,7 @@ Repare que o alerta aparece uma vez, na queda, e não se repete enquanto o servi
 python3 -m unittest -v
 ```
 
-Os testes sobem um servidor HTTP local e cobrem: resposta 200 e 404, status esperado diferente de 200, porta TCP aberta e fechada, validação da configuração e a regra de alertar só na mudança de estado. A checagem por ping usa o comando `ping` do sistema e não tem teste automatizado.
+Os testes sobem um servidor HTTP local e cobrem: resposta 200 e 404, status esperado diferente de 200, porta TCP aberta e fechada, validação da configuração e a regra de alertar só na mudança de estado. A checagem por ping usa o comando `ping` do sistema; os testes simulam a saída dele (inclusive o caso do Windows em que o código é 0 mesmo com "host de destino inacessível"), e o ping real foi validado manualmente no Windows.
 
 ## Limitações e próximos passos
 

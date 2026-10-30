@@ -2,7 +2,9 @@
 import http.server
 import socket
 import threading
+import subprocess
 import unittest
+from unittest import mock
 
 import monitor
 
@@ -54,6 +56,32 @@ class TestChecagens(unittest.TestCase):
 
     def test_tcp_porta_fechada(self):
         ok, _ = monitor.checar_tcp("127.0.0.1", porta_livre(), 1)
+        self.assertFalse(ok)
+
+
+def ping_simulado(codigo, saida):
+    return subprocess.CompletedProcess(args=["ping"], returncode=codigo, stdout=saida, stderr=b"")
+
+
+class TestPing(unittest.TestCase):
+    def test_windows_com_ttl_esta_ok(self):
+        resposta = ping_simulado(0, b"Reply from 192.168.0.1: bytes=32 time=2ms TTL=64")
+        with mock.patch("monitor.platform.system", return_value="Windows"), \
+             mock.patch("monitor.subprocess.run", return_value=resposta):
+            ok, _ = monitor.checar_ping("192.168.0.1", 1)
+        self.assertTrue(ok)
+
+    def test_windows_destino_inacessivel_falha_mesmo_com_codigo_zero(self):
+        resposta = ping_simulado(0, b"Reply from 192.168.0.5: Destination host unreachable.")
+        with mock.patch("monitor.platform.system", return_value="Windows"), \
+             mock.patch("monitor.subprocess.run", return_value=resposta):
+            ok, _ = monitor.checar_ping("192.168.0.5", 1)
+        self.assertFalse(ok)
+
+    def test_linux_codigo_diferente_de_zero_falha(self):
+        with mock.patch("monitor.platform.system", return_value="Linux"), \
+             mock.patch("monitor.subprocess.run", return_value=ping_simulado(1, b"")):
+            ok, _ = monitor.checar_ping("10.0.0.1", 1)
         self.assertFalse(ok)
 
 
