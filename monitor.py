@@ -42,6 +42,7 @@ def checar_http(url, timeout, status_esperado=200):
     except urllib.error.HTTPError as erro:
         # O servidor respondeu, mas com um código de erro (404, 500...).
         status = erro.code
+        erro.close()  # libera a conexão, evitando ResourceWarning
     except (urllib.error.URLError, OSError) as erro:
         return False, f"falha na requisição: {erro}"
 
